@@ -19,7 +19,7 @@ app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update this to your frontend origin if needed
+    allow_origins=["https://wordcloud-i4a1.vercel.app"],  # Update this to your frontend origin if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

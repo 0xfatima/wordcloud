@@ -18,7 +18,7 @@ export default function Uploader(){
     formData.append('file', selectedFile)
 
     try{
-        const response = await fetch("/generate-wordcloud",{
+        const response = await fetch("https://wordcloud-i4a1.vercel.app/generate-wordcloud",{
             method:'POST',
             body:formData
         })
