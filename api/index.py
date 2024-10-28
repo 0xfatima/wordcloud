@@ -49,7 +49,7 @@ def create_wordcloud(word_counts):
     return  img
 
 
-@app.post("/generate-wordcloud/")
+@app.post("/generate-wordcloud")
 async def generate_wordcloud(file: UploadFile = File(...)):
     contents= await file.read()
     text = extract_words_from_pdf(io.BytesIO(contents))
