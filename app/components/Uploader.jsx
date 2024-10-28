@@ -18,7 +18,7 @@ export default function Uploader(){
     formData.append('file', selectedFile)
 
     try{
-        const response = await fetch("http://localhost:8000/generate-wordcloud",{
+        const response = await fetch(`/generate-wordcloud/`,{
             method:'POST',
             body:formData
         })

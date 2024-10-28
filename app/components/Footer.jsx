@@ -3,7 +3,7 @@ export default function Footer(){
     return(
         <section className="flex flex-row justify-around pt-20 pb-10 px-10 footer-color ">
            <div className='w-1/2 '>
-            <Content heading='Let’s Stay Connected!'
+            <Content heading="Let's Stay Connected!"
             subheading="Join the [Your Company Name] Community!"
             paragraph='Be the first to know about our latest innovations,
                  exclusive offers, and industry insights! Sign up 
