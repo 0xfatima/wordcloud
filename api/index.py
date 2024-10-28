@@ -59,7 +59,7 @@ def hello_fast_api():
     return {"message": "Hello from FastAPI"}
 
 
-@router.post("/generate-wordcloud")
+@app.post("/generate-wordcloud/")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
@@ -70,6 +70,3 @@ async def generate_wordcloud(file: UploadFile = File(...)):
     except Exception as e:
         logging.error(f"Error in generate_wordcloud: {str(e)}")
         return {"error": "Internal Server Error"}, 500
-    
-    
-app.include_router(router)    
