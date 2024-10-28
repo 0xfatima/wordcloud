@@ -1,6 +1,6 @@
 
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI,File, UploadFile,APIRouter
+from fastapi import FastAPI,File, UploadFile
 from fastapi.responses import StreamingResponse
 import PyPDF2 
 from wordcloud import WordCloud
@@ -20,8 +20,6 @@ nltk.download('punkt_tab')
 
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
-
-router = APIRouter()
 
 app.add_middleware(
     CORSMiddleware,
@@ -54,12 +52,10 @@ def create_wordcloud(word_counts):
     img.seek(0)
     return  img
 
-@app.get("/api/py/helloFastApi")
-def hello_fast_api():
-    return {"message": "Hello from FastAPI"}
 
 
-@app.post("/api/py/generate-wordcloud/")
+
+@app.post("/generate-wordcloud")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
