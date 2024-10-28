@@ -21,13 +21,13 @@ nltk.download('punkt_tab')
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Update this to your frontend origin if needed
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Update this to your frontend origin if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def extract_words_from_pdf(pdf_file):
     text=''
@@ -55,7 +55,7 @@ def create_wordcloud(word_counts):
 
 
 
-@app.post("/api/py/generate-wordcloud")
+@app.post("/api/py/generate-wordcloud/")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
