@@ -9,6 +9,11 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from collections import Counter
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('punkt_tab')
@@ -51,9 +56,12 @@ def create_wordcloud(word_counts):
 
 @app.post("/generate-wordcloud")
 async def generate_wordcloud(file: UploadFile = File(...)):
-    contents= await file.read()
-    text = extract_words_from_pdf(io.BytesIO(contents))
-    word_count = tokenize_text(text)
-    img =  create_wordcloud(word_count)
-    
-    return StreamingResponse(img, media_type = 'image/png')
+    try:
+        contents = await file.read()
+        text = extract_words_from_pdf(io.BytesIO(contents))
+        word_count = tokenize_text(text)
+        img = create_wordcloud(word_count)
+        return StreamingResponse(img, media_type='image/png')
+    except Exception as e:
+        logging.error(f"Error in generate_wordcloud: {str(e)}")
+        return {"error": "Internal Server Error"}, 500
