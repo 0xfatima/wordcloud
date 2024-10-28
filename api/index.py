@@ -54,7 +54,8 @@ def create_wordcloud(word_counts):
     return  img
 
 
-@app.post("/api/py/generate-wordcloud/")
+
+@app.post("/generate-wordcloud/")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
