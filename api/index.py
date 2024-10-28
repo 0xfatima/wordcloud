@@ -24,7 +24,7 @@ app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://wordcloud-i4a1.vercel.app"],  # Update this to your frontend origin if needed
+    allow_origins=["*"],  # Update this to your frontend origin if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,7 +54,7 @@ def create_wordcloud(word_counts):
     return  img
 
 
-@app.post("/api/generate-wordcloud/")
+@app.post("/api/py/generate-wordcloud/")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
