@@ -16,7 +16,7 @@ className="absolute -top-36 left-0 z-0"
             <p>At [Your Company Name], we love to connect with
                  you and clarify your doubts! Below are some of 
                  the most frequently asked questions from our community.
-                  Don’t hesitate to reach out if you need more info or
+                  Don't hesitate to reach out if you need more info or
                    have something else on your mind!</p></div>
             <div className="flex flex-col gap-2 pt-5  pb-20"> 
                <Question question="What magic do you offer?"
@@ -26,10 +26,10 @@ className="absolute -top-36 left-0 z-0"
                <Question question="How do I get a tailor-made quote for my project?" 
                answer=" Getting a personalized quote is as easy as pie!
                 Just fill out our quick online form 
-               or reach out to our friendly sales team, and we’ll whip 
+               or reach out to our friendly sales team, and we'll whip 
                up a customized proposal that fits your vision."/>
                <Question question="What happens after my project goes live?"
-                answer="  Our journey doesn’t end at launch! We offer dedicated support
+                answer="  Our journey doesn't end at launch! We offer dedicated support
                  and maintenance services to ensure your project runs smoothly and 
                  continues to dazzle your audience."/>
 

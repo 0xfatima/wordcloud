@@ -8,15 +8,15 @@ export default function About(){
             </div>
             <div className="w-1/2 flex flex-col justify-center align-center gap-2">
                 <Content
-                heading='Who We Are'
-                subheading='Your Ultimate Partner in Digital Brilliance!'
-                paragraph='we are a powerhouse of creativity and innovation.
+                heading="Who We Are"
+                subheading="Your Ultimate Partner in Digital Brilliance!"
+                paragraph="we are a powerhouse of creativity and innovation.
                      Our mission? To empower you with tailor-made solutions that make waves
                       in your industry. Our dynamic team, fueled by passion and expertise,
                        thrives on challenges, turning them into remarkable opportunities for growth.
                         We envision a world where technology ignites your potential and drives 
-                        your success. Join us, and let’s embark on a thrilling adventure toward
-                         a digital future where the possibilities are limitless!'
+                        your success. Join us, and lets embark on a thrilling adventure toward
+                         a digital future where the possibilities are limitless!"
                 />
             </div>
             
