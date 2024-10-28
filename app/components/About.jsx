@@ -1,4 +1,5 @@
 import Content from './Content'
+import Link from 'next/link'
 export default function About(){
     return(
         <section className="flex flex-row justify-around pt-20 px-10 relative z-50">
