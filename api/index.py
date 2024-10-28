@@ -53,9 +53,12 @@ def create_wordcloud(word_counts):
     img.seek(0)
     return  img
 
+@app.get("/api/py/helloFastApi")
+def hello_fast_api():
+    return {"message": "Hello from FastAPI"}
 
 
-@app.post("/generate-wordcloud/")
+@app.post("/api/py/generate-wordcloud/")
 async def generate_wordcloud(file: UploadFile = File(...)):
     try:
         contents = await file.read()
