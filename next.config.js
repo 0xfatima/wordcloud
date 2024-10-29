@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   rewrites: async () => {
+    console.log("Environment:", process.env.NODE_ENV); // Log the environment
     return [
       {
         source: "/api/py/:path*",
