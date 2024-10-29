@@ -21,8 +21,11 @@ export default function Uploader(){
         const response = await fetch("/api/py/generate-wordcloud/",{
 
             method:"POST",
-            body:formData
-        })
+            body:formData,
+            headers:{
+                "Content-Type": "multipart/form-data",
+            }
+        });
 
         if(response.ok){
             const blob = await response.blob();
