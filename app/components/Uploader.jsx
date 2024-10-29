@@ -19,7 +19,8 @@ export default function Uploader(){
 
     try{
         const response = await fetch("/api/py/generate-wordcloud/",{
-            method:'POST',
+
+            method:"POST",
             body:formData
         })
 
