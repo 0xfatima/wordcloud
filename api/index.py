@@ -53,10 +53,9 @@ def create_wordcloud(word_counts):
     return  img
 
 
-
-
-@app.post("/api/py/generatewordcloud/")
-async def generatewordcloud(file: UploadFile = File(...)):
+@app.post("/api/py/generate-wordcloud/")
+async def generate_wordcloud(file: UploadFile = File(...)):
+    logging.info("Received file: %s", file.filename)  # Log the received filename
     try:
         contents = await file.read()
         text = extract_words_from_pdf(io.BytesIO(contents))
