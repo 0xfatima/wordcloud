@@ -1,5 +1,9 @@
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
-PyPDF2
-nltk
-wordcloud
+python-multipart==0.0.12
+PyPDF2==3.0.1
+nltk==3.9.1
+wordcloud==1.9.3
+pillow==10.4.0
+numpy==1.26.4
+matplotlib==3.9.2
