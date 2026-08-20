@@ -4,8 +4,9 @@ import Hero from "./HeroSection";
 import { useMemo, useState } from "react";
 import Navbar from "./Navbar";
 
-// Vercel serverless request body limit is ~4.5MB (multipart overhead included)
 const MAX_FILE_BYTES = 3.5 * 1024 * 1024;
+// Hit Vercel Python function directly — avoids /api/py rewrite redirect loops
+const GENERATE_URL = "/api/index";
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -14,25 +15,17 @@ function formatBytes(bytes) {
 }
 
 function validatePdfFile(file) {
-  if (!file) {
-    return "Please upload a PDF file first.";
-  }
+  if (!file) return "Please upload a PDF file first.";
 
   const isPdf =
     file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
 
-  if (!isPdf) {
-    return "Invalid file type. Please upload a PDF (.pdf) only.";
-  }
-
-  if (file.size === 0) {
-    return "This PDF is empty. Please choose another file.";
-  }
-
+  if (!isPdf) return "Invalid file type. Please upload a PDF (.pdf) only.";
+  if (file.size === 0) return "This PDF is empty. Please choose another file.";
   if (file.size > MAX_FILE_BYTES) {
     return `This PDF is ${formatBytes(file.size)}. Max size is ${formatBytes(
       MAX_FILE_BYTES
-    )} (Vercel upload limit). Try a smaller or text-only PDF.`;
+    )}. Try a smaller text-only PDF.`;
   }
 
   return "";
@@ -42,7 +35,7 @@ export default function Uploader() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [wordcloudImage, setWordcloudImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("Please upload a PDF file first.");
+  const [error, setError] = useState("");
 
   const validationError = useMemo(() => validatePdfFile(selectedFile), [selectedFile]);
   const isValidPdf = Boolean(selectedFile) && !validationError;
@@ -85,8 +78,7 @@ export default function Uploader() {
     setWordcloudImage(null);
 
     try {
-      // Do NOT set Content-Type manually — the browser must add the multipart boundary
-      const response = await fetch("/api/py/generate-wordcloud/", {
+      const response = await fetch(GENERATE_URL, {
         method: "POST",
         body: formData,
       });
@@ -96,9 +88,9 @@ export default function Uploader() {
       if (!response.ok) {
         if (response.status === 413) {
           throw new Error(
-            `PDF is too large for the server (limit ~4.5MB). Your file is ${formatBytes(
+            `PDF is too large for the server. Your file is ${formatBytes(
               selectedFile.size
-            )}. Please upload a smaller PDF.`
+            )}. Please upload a file under ${formatBytes(MAX_FILE_BYTES)}.`
           );
         }
 
@@ -118,12 +110,17 @@ export default function Uploader() {
       }
 
       const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setWordcloudImage(url);
+      setWordcloudImage(URL.createObjectURL(blob));
       setError("");
     } catch (err) {
       console.error("Error uploading file:", err);
-      setError(err.message || "Error uploading file.");
+      if (err?.message === "Failed to fetch") {
+        setError(
+          "Could not reach the word cloud API (network/redirect error). Please try again after redeploy, or use a smaller PDF."
+        );
+      } else {
+        setError(err.message || "Error uploading file.");
+      }
     } finally {
       setLoading(false);
     }
@@ -144,7 +141,7 @@ export default function Uploader() {
               htmlFor="file-upload"
               className="mx-auto hover:bg-blue-400 bg-blue-500 w-1/2 p-3 text-center rounded-md cursor-pointer text-white"
             >
-              {selectedFile ? "Select another file" : "Select a PDF"}
+              Select a PDF
             </label>
             <input
               id="file-upload"
@@ -155,28 +152,32 @@ export default function Uploader() {
             />
           </div>
 
-          {selectedFile ? (
-            <p className="mt-4 text-blue-900 font-bold">
-              Selected: {selectedFile.name} ({formatBytes(selectedFile.size)})
-            </p>
-          ) : (
-            <p className="mt-4 text-blue-900/80">No PDF uploaded yet.</p>
-          )}
-
+          {/* Convert: grey + disabled until a valid PDF is uploaded; red when ready */}
           <button
+            type="button"
             onClick={handleUpload}
             disabled={!canConvert}
-            className={`mt-4 w-1/4 p-3 text-center rounded-md text-white ${
+            className={`mt-4 w-1/4 p-3 text-center rounded-md text-white font-semibold transition ${
               canConvert
-                ? "bg-blue-500 hover:bg-blue-400 cursor-pointer"
-                : "bg-gray-400 cursor-not-allowed opacity-70"
+                ? "bg-red-600 hover:bg-red-500 cursor-pointer"
+                : "bg-gray-400 cursor-not-allowed"
             }`}
           >
             {loading ? "Generating..." : "Convert"}
           </button>
 
+          {/* Re-upload + size under Convert — always clickable to pick another file */}
+          <label
+            htmlFor="file-upload"
+            className="mt-2 text-sm text-blue-900 underline cursor-pointer hover:text-blue-700"
+          >
+            {selectedFile
+              ? `Re-upload file — ${selectedFile.name} (${formatBytes(selectedFile.size)})`
+              : "No PDF uploaded yet — click to choose a file"}
+          </label>
+
           {error && (
-            <div className="mt-4 max-w-xl rounded-md border border-red-300 bg-red-50 px-4 py-3 text-red-700 font-semibold text-center">
+            <div className="mt-4 max-w-xl rounded-md border border-red-300 bg-red-50 px-4 py-3 text-red-700 font-medium text-center">
               {error}
             </div>
           )}
