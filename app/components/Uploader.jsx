@@ -5,8 +5,9 @@ import { useMemo, useState } from "react";
 import Navbar from "./Navbar";
 
 const MAX_FILE_BYTES = 3.5 * 1024 * 1024;
-// Hit Vercel Python function directly — avoids /api/py rewrite redirect loops
-const GENERATE_URL = "/api/index";
+// Must use /api/py/... so next.config can rewrite to the Python function on Vercel.
+// No trailing slash — avoids FastAPI/Vercel redirect loops.
+const GENERATE_URL = "/api/py/generate-wordcloud";
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
